@@ -261,7 +261,13 @@ async function loadDashboardData() {
         if (statsResult.success) {
             const stats = statsResult.data;
             document.getElementById('pendingReviews').textContent = stats.pending_reviews;
-            document.getElementById('completedReviews').textContent = stats.completed_reviews;
+            
+            // Update completed reviews with candidate count below
+            const completedReviewsElement = document.getElementById('completedReviews');
+            const candidateCount = stats.unique_candidates_reviewed || 0;
+            const candidateText = candidateCount === 1 ? 'candidate' : 'candidates';
+            completedReviewsElement.innerHTML = `${stats.completed_reviews}<br><small style="font-size: 0.8rem; color: #6c757d;">${candidateCount} ${candidateText}</small>`;
+            
             document.getElementById('totalCandidates').textContent = stats.total_candidates;
             document.getElementById('averageScore').textContent = stats.average_score;
         }
@@ -431,6 +437,7 @@ document.getElementById('submitReview').addEventListener('click', async function
             alert('Review submitted successfully!');
             bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
             loadSubmissions(); // Reload submissions
+            loadDashboardData(); // Reload dashboard statistics
         } else {
             const errorText = await response.text();
             alert('Error submitting review: ' + errorText);

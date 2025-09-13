@@ -425,6 +425,12 @@ class WebController extends Controller
         // Get completed reviews by this user
         $completedReviews = \App\Models\Score::where('reviewer_id', $user->id)->count();
         
+        // Get unique candidates reviewed by this user
+        $uniqueCandidatesReviewed = \App\Models\Score::where('reviewer_id', $user->id)
+            ->join('submissions', 'scores.submission_id', '=', 'submissions.id')
+            ->distinct('submissions.candidate_id')
+            ->count('submissions.candidate_id');
+        
         // Get total candidates
         $totalCandidates = \App\Models\User::where('role', 'candidate')->count();
         
@@ -434,6 +440,7 @@ class WebController extends Controller
         $stats = [
             'pending_reviews' => $pendingReviews,
             'completed_reviews' => $completedReviews,
+            'unique_candidates_reviewed' => $uniqueCandidatesReviewed,
             'total_candidates' => $totalCandidates,
             'average_score' => round($averageScore, 1) ?: 0.0
         ];
