@@ -3,82 +3,171 @@
 @section('title', 'Reviewer Dashboard - Hireflix Clone')
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1><i class="fas fa-user-check text-success me-2"></i>Review Dashboard</h1>
-            <div class="text-muted">
-                <i class="fas fa-info-circle me-1"></i>
-                Review and score candidate submissions
-            </div>
-        </div>
-    </div>
-</div>
+<style>
+.dashboard-card {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    background: #fff;
+}
 
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="fas fa-video fa-2x text-primary mb-2"></i>
-                <h5 class="card-title">Pending Reviews</h5>
-                <h3 class="text-primary" id="pendingReviews">0</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
-                <h5 class="card-title">Completed Reviews</h5>
-                <h3 class="text-success" id="completedReviews">0</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="fas fa-users fa-2x text-info mb-2"></i>
-                <h5 class="card-title">Total Candidates</h5>
-                <h3 class="text-info" id="totalCandidates">0</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="fas fa-star fa-2x text-warning mb-2"></i>
-                <h5 class="card-title">Average Score</h5>
-                <h3 class="text-warning" id="averageScore">0.0</h3>
-            </div>
-        </div>
-    </div>
-</div>
+.dashboard-card:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 4px rgba(0,123,255,0.1);
+}
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Submissions to Review</h5>
+.stat-card {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stat-card .icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .number {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+
+.stat-card .label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-classic {
+    background: #007bff;
+    border: 1px solid #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s ease;
+}
+
+.btn-classic:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+
+.table-classic {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.table-classic thead {
+    background: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table-classic th {
+    border: none;
+    padding: 1rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.table-classic td {
+    border: none;
+    padding: 1rem;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.table-classic tbody tr:hover {
+    background: #f8f9fa;
+}
+</style>
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1" style="color: #2c3e50; font-weight: 600;">Review Dashboard</h2>
+                    <p class="text-muted mb-0">Review and score candidate submissions</p>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Candidate</th>
-                                <th>Interview</th>
-                                <th>Question</th>
-                                <th>Submitted</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="submissionsTable">
-                            <tr>
-                                <td colspan="6" class="text-center text-muted">No submissions to review</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card dashboard-card">
+                <div class="icon text-primary">
+                    <i class="fas fa-video"></i>
+                </div>
+                <div class="number text-primary" id="pendingReviews">0</div>
+                <div class="label">Pending Reviews</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card dashboard-card">
+                <div class="icon text-success">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="number text-success" id="completedReviews">0</div>
+                <div class="label">Completed Reviews</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card dashboard-card">
+                <div class="icon text-info">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="number text-info" id="totalCandidates">0</div>
+                <div class="label">Total Candidates</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card dashboard-card">
+                <div class="icon text-warning">
+                    <i class="fas fa-star"></i>
+                </div>
+                <div class="number text-warning" id="averageScore">0.0</div>
+                <div class="label">Average Score</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="card-header" style="background: #f8f9fa; border-bottom: 1px solid #dee2e6; padding: 1rem 1.5rem;">
+                    <h5 class="mb-0" style="color: #495057; font-weight: 600;">
+                        <i class="fas fa-list me-2"></i>Submissions to Review
+                    </h5>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <div class="table-responsive">
+                        <table class="table table-classic mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Candidate</th>
+                                    <th>Interview</th>
+                                    <th>Question</th>
+                                    <th>Submitted</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="submissionsTable">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted" style="padding: 2rem;">No submissions to review</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

@@ -4,90 +4,173 @@
 
 @section('content')
 <style>
-.clickable-card {
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+.dashboard-card {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    background: #fff;
 }
 
-.clickable-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+.dashboard-card:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 4px rgba(0,123,255,0.1);
+}
+
+.stat-card {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stat-card .icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .number {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+
+.stat-card .label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-classic {
+    background: #007bff;
+    border: 1px solid #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s ease;
+}
+
+.btn-classic:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+
+.table-classic {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.table-classic thead {
+    background: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table-classic th {
+    border: none;
+    padding: 1rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.table-classic td {
+    border: none;
+    padding: 1rem;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.table-classic tbody tr:hover {
+    background: #f8f9fa;
 }
 </style>
-<div class="row">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1><i class="fas fa-crown text-warning me-2"></i>Admin Dashboard</h1>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createInterviewModal">
-                <i class="fas fa-plus me-2"></i>Create New Interview
-            </button>
-        </div>
-    </div>
-</div>
 
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="fas fa-clipboard-list fa-2x text-primary mb-2"></i>
-                <h5 class="card-title">Total Interviews</h5>
-                <h3 class="text-primary" id="totalInterviews">0</h3>
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1" style="color: #2c3e50; font-weight: 600;">Admin Dashboard</h2>
+                    <p class="text-muted mb-0">Manage interviews, candidates, and submissions</p>
+                </div>
+                <button class="btn-classic" data-bs-toggle="modal" data-bs-target="#createInterviewModal">
+                    <i class="fas fa-plus me-2"></i>Create Interview
+                </button>
             </div>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card text-center clickable-card" onclick="showCandidatesModal()" style="cursor: pointer;">
-            <div class="card-body">
-                <i class="fas fa-users fa-2x text-success mb-2"></i>
-                <h5 class="card-title">Total Candidates</h5>
-                <h3 class="text-success" id="totalCandidates">0</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center clickable-card" onclick="showReviewersModal()" style="cursor: pointer;">
-            <div class="card-body">
-                <i class="fas fa-user-check fa-2x text-info mb-2"></i>
-                <h5 class="card-title">Total Reviewers</h5>
-                <h3 class="text-info" id="totalReviewers">0</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center clickable-card" onclick="showSubmissionsModal()" style="cursor: pointer;">
-            <div class="card-body">
-                <i class="fas fa-video fa-2x text-warning mb-2"></i>
-                <h5 class="card-title">Total Submissions</h5>
-                <h3 class="text-warning" id="totalSubmissions">0</h3>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Recent Interviews</h5>
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card dashboard-card" style="cursor: pointer;" onclick="showCandidatesModal()">
+                <div class="icon text-primary">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <div class="number text-primary" id="totalInterviews">0</div>
+                <div class="label">Total Interviews</div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Status</th>
-                                <th>Questions</th>
-                                <th>Submissions</th>
-                                <th>Created</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="interviewsTable">
-                            <tr>
-                                <td colspan="6" class="text-center text-muted">No interviews found</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card dashboard-card" style="cursor: pointer;" onclick="showCandidatesModal()">
+                <div class="icon text-success">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="number text-success" id="totalCandidates">0</div>
+                <div class="label">Total Candidates</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card dashboard-card" style="cursor: pointer;" onclick="showReviewersModal()">
+                <div class="icon text-info">
+                    <i class="fas fa-user-check"></i>
+                </div>
+                <div class="number text-info" id="totalReviewers">0</div>
+                <div class="label">Total Reviewers</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card dashboard-card" style="cursor: pointer;" onclick="showSubmissionsModal()">
+                <div class="icon text-warning">
+                    <i class="fas fa-video"></i>
+                </div>
+                <div class="number text-warning" id="totalSubmissions">0</div>
+                <div class="label">Total Submissions</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="card-header" style="background: #f8f9fa; border-bottom: 1px solid #dee2e6; padding: 1rem 1.5rem;">
+                    <h5 class="mb-0" style="color: #495057; font-weight: 600;">
+                        <i class="fas fa-list me-2"></i>Recent Interviews
+                    </h5>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <div class="table-responsive">
+                        <table class="table table-classic mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                    <th>Questions</th>
+                                    <th>Submissions</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="interviewsTable">
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted" style="padding: 2rem;">No interviews found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

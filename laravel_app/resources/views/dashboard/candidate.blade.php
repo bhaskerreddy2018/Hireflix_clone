@@ -3,72 +3,161 @@
 @section('title', 'Candidate Dashboard - Hireflix Clone')
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1><i class="fas fa-user-graduate text-primary me-2"></i>My Interviews</h1>
-            <div class="text-muted">
-                <i class="fas fa-info-circle me-1"></i>
-                Complete your assigned interviews to showcase your skills
-            </div>
-        </div>
-    </div>
-</div>
+<style>
+.dashboard-card {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    background: #fff;
+}
 
-<div class="row mb-4">
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="fas fa-clipboard-list fa-2x text-primary mb-2"></i>
-                <h5 class="card-title">Available Interviews</h5>
-                <h3 class="text-primary" id="availableInterviews">0</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="fas fa-video fa-2x text-success mb-2"></i>
-                <h5 class="card-title">Completed</h5>
-                <h3 class="text-success" id="completedInterviews">0</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <i class="fas fa-clock fa-2x text-warning mb-2"></i>
-                <h5 class="card-title">In Progress</h5>
-                <h3 class="text-warning" id="inProgressInterviews">0</h3>
-            </div>
-        </div>
-    </div>
-</div>
+.dashboard-card:hover {
+    border-color: #007bff;
+    box-shadow: 0 2px 4px rgba(0,123,255,0.1);
+}
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0"><i class="fas fa-list me-2"></i>Interview List</h5>
+.stat-card {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.stat-card .icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .number {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+}
+
+.stat-card .label {
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-classic {
+    background: #007bff;
+    border: 1px solid #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s ease;
+}
+
+.btn-classic:hover {
+    background: #0056b3;
+    border-color: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+
+.table-classic {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.table-classic thead {
+    background: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table-classic th {
+    border: none;
+    padding: 1rem;
+    font-weight: 600;
+    color: #495057;
+}
+
+.table-classic td {
+    border: none;
+    padding: 1rem;
+    border-bottom: 1px solid #f1f3f4;
+}
+
+.table-classic tbody tr:hover {
+    background: #f8f9fa;
+}
+</style>
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1" style="color: #2c3e50; font-weight: 600;">My Interviews</h2>
+                    <p class="text-muted mb-0">Complete your assigned interviews to showcase your skills</p>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Interview Title</th>
-                                <th>Description</th>
-                                <th>Questions</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="interviewsTable">
-                            <tr>
-                                <td colspan="5" class="text-center text-muted">No interviews available</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stat-card dashboard-card">
+                <div class="icon text-primary">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <div class="number text-primary" id="availableInterviews">0</div>
+                <div class="label">Available Interviews</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card dashboard-card">
+                <div class="icon text-success">
+                    <i class="fas fa-video"></i>
+                </div>
+                <div class="number text-success" id="completedInterviews">0</div>
+                <div class="label">Completed</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card dashboard-card">
+                <div class="icon text-warning">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="number text-warning" id="inProgressInterviews">0</div>
+                <div class="label">In Progress</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="card-header" style="background: #f8f9fa; border-bottom: 1px solid #dee2e6; padding: 1rem 1.5rem;">
+                    <h5 class="mb-0" style="color: #495057; font-weight: 600;">
+                        <i class="fas fa-list me-2"></i>Interview List
+                    </h5>
+                </div>
+                <div class="card-body" style="padding: 0;">
+                    <div class="table-responsive">
+                        <table class="table table-classic mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Interview Title</th>
+                                    <th>Description</th>
+                                    <th>Questions</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="interviewsTable">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted" style="padding: 2rem;">No interviews available</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
